@@ -1,0 +1,6 @@
+source('./cleaning.R')
+source('./brandset.R')
+source('./pairs.R')
+source('./distance.R')
+source('./competitors.R')
+source('./allBrandsMerged.R')
