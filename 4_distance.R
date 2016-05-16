@@ -1,5 +1,5 @@
 if (!exists('brandsets')){
-  source('./pairs.R')
+  source('./3_pairs.R')
 }
 
 for (brandset in allBrandSets) {

@@ -1,5 +1,5 @@
 if (!exists('allBrandSets')){
-  source('./distance.R')
+  source('./4_distance.R')
 }
 
 if (exists('sales')){
@@ -55,14 +55,29 @@ for (brandset in allBrandSets) {
     otherQuality <- competitors[[name]][[paste(j, 'quality', sep = '_')]] * competitors[[name]][[paste(j, 'sales', sep = '_')]] / competitors[[name]]$totalSales
   }
 
-  allBrandSets[[name]]$otherPrice <- otherPrice
-  allBrandSets[[name]]$otherPromo <- otherPromo
-  allBrandSets[[name]]$otherAdv <- otherAdv
-  allBrandSets[[name]]$otherDist <- otherDist
-  allBrandSets[[name]]$otherAwar <- otherAwar
-  allBrandSets[[name]]$otherCons <- otherCons
-  allBrandSets[[name]]$otherLiking <- otherLiking
-  allBrandSets[[name]]$otherBrand <- otherBrand
-  allBrandSets[[name]]$otherQuality <- otherQuality
+  allBrandSets[[name]]$other_price <- otherPrice
+  allBrandSets[[name]]$other_promo <- otherPromo
+  allBrandSets[[name]]$other_adv <- otherAdv
+  allBrandSets[[name]]$other_dist <- otherDist
+  allBrandSets[[name]]$other_awar <- otherAwar
+  allBrandSets[[name]]$other_cons <- otherCons
+  allBrandSets[[name]]$other_liking <- otherLiking
+  allBrandSets[[name]]$other_brand <- otherBrand
+  allBrandSets[[name]]$other_quality <- otherQuality
+
+  newColsToStandardize = c("other_price", "other_promo", "other_adv", "other_dist", "other_awar", "other_cons", "other_liking", "other_brand", "other_quality", "dominance")
+  
+  for (col in newColsToStandardize) {
+    newColName <- paste('z', col, sep = '_')
+    tmp <- allBrandSets[[name]]
+    tmp[, newColName] <- 0
+
+    for (row in 1:NROW(tmp[, col])) {
+      tmp[row, newColName] <- (tmp[row, col] - mean(tmp[, col])) / 2 * sd(tmp[, col])
+    }
+
+    allBrandSets[[name]] <- tmp
+  
+  }
 
 }

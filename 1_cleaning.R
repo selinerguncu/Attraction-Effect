@@ -77,6 +77,27 @@ for (brand in allBrands) {
   tmp$normPrice <- (tmp$price - minPrice) / (maxPrice - minPrice)
   tmp$normQuality <- (tmp$quality - minQuality) / (maxQuality - minQuality)
   tmp$pqScore <- tmp$normPrice + tmp$normQuality
+  
+  for (col in keeps) {
+    newColName <- paste('z', col, sep = '_')
+    tmp[, newColName] <- 0
+
+    for (row in 1:NROW(tmp[, col])) {
+      tmp[row, newColName] <- (tmp[row, col] - mean(tmp[, col])) / 2 * sd(tmp[, col])
+    }
+  
+  }
+  
+  lagged <- tmp
+  real <- tmp
+  
+  lagged <- lagged[-1, ]
+  colnames(lagged) <- paste('lag', colnames(lagged), sep = '_')
+  
+  real <- real[-130, ]
+
+  tmp <- cbind(lagged, real)
+  tmp$time <- 1:NROW(tmp[, 1])
 
   brands[[brand]] <- tmp
 }
